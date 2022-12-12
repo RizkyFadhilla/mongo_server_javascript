@@ -1,28 +1,24 @@
-const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../confiq/mongo-connection");
 
-class userDatabase {
+class animeDatabase {
   static invokeDatabase() {
     let db = getDatabase();
-    return db.collection("users");
+    return db.collection("anime");
   }
-  static getAllUser() {
+  static getAllAnime() {
     return this.invokeDatabase().find().toArray();
   }
-  static getOneUser(id) {
+  static getOneAnime(id) {
     return this.invokeDatabase().findOne({ _id: ObjectId(id) });
   }
-  static registerUser(input) {
+  static addAnime(input) {
     return this.invokeDatabase().insertOne(input);
   }
-  static updateUser(input) {
+  static updateAnime(input) {
     return this.invokeDatabase().updateOne(input);
   }
-  static deleteUser(id) {
+  static deleteAnime(id) {
     return this.invokeDatabase().deleteOne({ _id: ObjectId(id) });
   }
-  static checkUser(username) {
-    return this.invokeDatabase().findOne({ username: username });
-  }
 }
-module.exports = userDatabase;
+module.exports = animeDatabase;
