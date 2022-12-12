@@ -41,5 +41,44 @@ class animeController {
       res.status(500).json("Internal Service Error");
     }
   }
+  static async updateAnimeData(req, res) {
+    try {
+      let id = req.params.id;
+      let { title, synopsis, trailerUrl, imgUrl } = req.body;
+      if (!title || !synopsis || !trailerUrl || !imgUrl) {
+        res.status(400).json("Please fill the empty spot");
+      }
+      let checkData = await animeDatabase.getOneAnime(id);
+      if (!checkData) {
+        res.status(404).json("Data Not Found");
+      }
+      const updateData = {
+        $set: {
+          title,
+          synopsis,
+          mongoDbId: checkData.mongoDbId,
+          trailerUrl,
+          imgUrl,
+        },
+      };
+      await userDb.updateData(id, updateData);
+      res.status(200).json("update data success");
+    } catch (error) {
+      res.status(500).json("Internal Service Error");
+    }
+  }
+  static async deleteOneAnime(req, res) {
+    try {
+      let id = req.params.id;
+      let checkData = await animeDatabase.getOneAnime(id);
+      if (!checkData) {
+        res.status(404).json("Data Not Found");
+      }
+      await animeDatabase.deleteAnime(id);
+      res.status(200).json("Anime has been deleted");
+    } catch (error) {
+      res.status(500).json("Internal Service Error");
+    }
+  }
 }
 module.exports = animeController;
