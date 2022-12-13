@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
+  name: mongodbtest
 spec:
   selector:
     matchLabels:
-      app: app
+      app: mongodbtest
   template:
     metadata:
       labels:
-        app: app
+        app: mongodbtest
     spec:
       containers:
       - name: nodeserver
-        image: mongodbtest/app:latest
+        image: narashi/mongodbtest:latest
         resources:
           limits:
             memory: "128Mi"
