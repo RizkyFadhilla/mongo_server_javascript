@@ -15,8 +15,8 @@ class userDatabase {
   static registerUser(input) {
     return this.invokeDatabase().insertOne(input);
   }
-  static updateUser(input) {
-    return this.invokeDatabase().updateOne(input);
+  static updateUser(id,input) {
+    return this.invokeDatabase().updateOne({ _id: ObjectId(id) }, input);
   }
   static deleteUser(id) {
     return this.invokeDatabase().deleteOne({ _id: ObjectId(id) });

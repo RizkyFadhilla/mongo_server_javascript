@@ -6,6 +6,9 @@ class userController {
   static async getAllUserRegister(req, res) {
     try {
       let user = await userDatabase.getAllUser();
+      user.forEach((element) => {
+        delete element.password;
+      });
       res.status(200).json(user);
     } catch (error) {
       res.status(500).json("Internal Service Error");
@@ -68,7 +71,50 @@ class userController {
         role: checkUserLogin.role,
       };
       const access_token = signPayload(payload);
-      res.status(200).json(access_token);
+      res.status(200).json({ access_token });
+    } catch (error) {
+      res.status(500).json("Internal Service Error");
+    }
+  }
+  static async updateUserData(req, res) {
+    try {
+      let id = req.params.id;
+      let { username, password, role} = req.body;
+      if (!username || !password || !role) {
+        res.status(400).json("Please fill the empty spot");
+        return;
+      }
+      let checkUser = await userDatabase.getOneUser(id);
+      if (!checkUser) {
+        res.status(404).json("Data Not Found");
+        return;
+      }
+      const updateData = {
+        $set: {
+          _id:checkUser._id,
+          username,
+          password,
+          role
+        },
+      };
+      console.log(updateData)
+      await userDatabase.updateUser(id, updateData);
+      res.status(200).json("update data success");
+    } catch (error) {
+      console.log(error);
+      res.status(500).json("Internal Service Error");
+    }
+  }
+  static async deleteOneUser(req, res) {
+    try {
+      let id = req.params.id;
+      let checkUser = await userDatabase.getOneUser(id);
+      if (!checkUser) {
+        res.status(404).json("Data Not Found");
+        return;
+      }
+      await userDatabase.deleteUser(id);
+      res.status(200).json("User has been deleted");
     } catch (error) {
       res.status(500).json("Internal Service Error");
     }
