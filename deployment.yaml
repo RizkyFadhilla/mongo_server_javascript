@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx
+  name: app
 spec:
   selector:
     matchLabels:
-      app: nginx
+      app: app
   template:
     metadata:
       labels:
-        app: nginx
+        app: app
     spec:
       containers:
-      - name: nginx
-        image: nginx:latest
+      - name: nodeserver
+        image: mongodbtest/app:latest
         resources:
           limits:
             memory: "128Mi"
